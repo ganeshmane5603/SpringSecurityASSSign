@@ -1,7 +1,10 @@
 package com.example.employeeManagement.controller;
 
 import com.example.employeeManagement.entity.Employee;
+import com.example.employeeManagement.entity.User;
 import com.example.employeeManagement.service.EmployeeService;
+import com.example.employeeManagement.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.*;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -13,6 +16,9 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/employees")
 public class EmployeeController {
+
+    @Autowired
+    private UserService userService;
     private final EmployeeService service;
     public EmployeeController(EmployeeService service) { this.service = service; }
 
@@ -68,6 +74,11 @@ public class EmployeeController {
     ) {
         Page<Employee> employees = service.findAll(page, size, sortBy, sortDir);
         return ResponseEntity.ok(employees);
+    }
+
+    @PostMapping("/add")
+    public User createUser(@RequestBody User user){
+        return userService.createUser(user);
     }
 }
 
